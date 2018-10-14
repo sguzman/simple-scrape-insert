@@ -39,11 +39,11 @@ def channels(idx):
 
 
 def connect():
-    return psycopg2.connect(user='admin', password='admin', host='192.168.1.63', port='5432', database='youtube')
+    return psycopg2.connect(user='postgres', password='', host='192.168.1.63', port='30339', database='youtube')
 
 
 def insert(conn, serial):
-    sql = 'INSERT INTO youtube.simple.channels (chan_serial) VALUES (%s) ON CONFLICT (chan_serial) DO NOTHING;'
+    sql = 'INSERT INTO youtube.entities.channels (serial) VALUES (%s) ON CONFLICT (serial) DO NOTHING;'
     cursor = conn.cursor()
 
     cursor.execute(sql, [serial])
@@ -52,24 +52,23 @@ def insert(conn, serial):
 
 
 def main():
-    while True:
-        conn = connect()
-        pages = max_pages()
-        range_nums = list(range(1, pages + 1))
-        random.shuffle(range_nums)
+    conn = connect()
+    pages = max_pages()
+    range_nums = list(range(1, pages + 1))
+    random.shuffle(range_nums)
 
-        print('Found', pages, 'pages')
+    print('Found', pages, 'pages')
 
-        for i in range_nums:
-            print('On page', i)
+    for i in range_nums:
+        print('On page', i)
 
-            chans = channels(i)
-            print('Found', len(chans))
-            for c in chans:
-                print('Inserting', c)
-                insert(conn, c)
+        chans = channels(i)
+        print('Found', len(chans))
+        for c in chans:
+            print('Inserting', c)
+            insert(conn, c)
 
-        conn.close()
+    conn.close()
 
 
 if __name__ == '__main__':
