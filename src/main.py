@@ -39,7 +39,7 @@ def channels(idx):
 
 
 def connect():
-    return psycopg2.connect(user='postgres', password='', host='localhost', port='5432', database='youtube')
+    return psycopg2.connect(user='postgres', password='', host='postgres-pod', port='5432', database='youtube')
 
 
 def insert(conn, serial):
