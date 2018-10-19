@@ -2,6 +2,7 @@ import bs4
 import psycopg2
 import random
 import requests
+import time
 
 
 def soup(url):
@@ -52,23 +53,26 @@ def insert(conn, serial):
 
 
 def main():
-    conn = connect()
-    pages = max_pages()
-    range_nums = list(range(1, pages + 1))
-    random.shuffle(range_nums)
+    while True:
+        time.sleep(50)
+        conn = connect()
+        pages = max_pages()
+        range_nums = list(range(1, pages + 1))
+        random.shuffle(range_nums)
 
-    print('Found', pages, 'pages')
+        print('Found', pages, 'pages')
 
-    for i in range_nums:
-        print('On page', i)
+        for i in range_nums:
+            time.sleep(3)
+            print('On page', i)
 
-        chans = channels(i)
-        print('Found', len(chans))
-        for c in chans:
-            print('Inserting', c)
-            insert(conn, c)
+            chans = channels(i)
+            print('Found', len(chans))
+            for c in chans:
+                print('Inserting', c)
+                insert(conn, c)
 
-    conn.close()
+        conn.close()
 
 
 if __name__ == '__main__':
